@@ -14,8 +14,8 @@ struct Noise{
 	SDL_Renderer *renderer;
 	bool isRunning;
 	SDL_Window *window;
-	int width = 1920;
-	int height = 1080;
+	int width = 910;
+	int height = 540;
 	void init(const char* title, int posX, int posY, int width, int height, bool fullscreen);
 	void handleEvents();
 	void update();
