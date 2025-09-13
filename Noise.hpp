@@ -9,6 +9,8 @@
 #include "Tile.hpp"
 #include <string>
 #include "Camera.hpp"
+#include "Shares.hpp"
+#include "Button.hpp"
 
 struct Noise{
 	SDL_Renderer *renderer;

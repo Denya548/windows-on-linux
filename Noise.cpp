@@ -5,12 +5,7 @@ using namespace std;
 
 SDL_Event event;
 
-Camera camera;
-int seed = 1;
-
-int length(int x1, int y1, int x2, int y2){
-	return(sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2)));
-}
+Button but;
 
 void Noise::init(const char *title, int posX, int posY, int width, int height, bool fullscrean){
 	if(SDL_Init(SDL_INIT_EVERYTHING) == 0){
@@ -21,19 +16,12 @@ void Noise::init(const char *title, int posX, int posY, int width, int height, b
 		isRunning = true;
 		frame = 0;
 		
-		if(seed == 0){
-			seed = time(nullptr);
-		}	
-		srand(seed);
-		//SDL_RenderSetScale(renderer,2 , 2);
+		SDL_HideWindow(window2);
 	}
 }
 
 void Noise::update(){
 	frame++;
-
-	camera.posX += camera.direct[0] * camera.speed;	
-	camera.posY += camera.direct[1] * camera.speed;	
 }
 
 void Noise::handleEvents()
@@ -48,41 +36,14 @@ void Noise::handleEvents()
 						break;
 					case SDLK_w:
 						SDL_HideWindow(window2);
-						camera.direct[1] = -1;
 						break;
 					case SDLK_s:
-						camera.direct[1] = 1;
 						SDL_ShowWindow(window2);
-						break;
-					case SDLK_a:
-						camera.direct[0] = -1;
-						break;
-					case SDLK_d:
-						camera.direct[0] = 1;
 						break;
 					default:
         				break;
 				}
 				break;
-
-			case SDL_KEYUP:
-				switch (event.key.keysym.sym){
-					case SDLK_w:
-						camera.direct[1] = 0;
-						break;
-					case SDLK_s:
-						camera.direct[1] = 0;
-						break;
-					case SDLK_a:
-						camera.direct[0] = 0;
-						break;
-					case SDLK_d:
-						camera.direct[0] = 0;
-						break;
-					default:
-        				break;
-				}
-				break;			
 
 			case SDL_QUIT:
             	isRunning = false;
@@ -92,13 +53,13 @@ void Noise::handleEvents()
 }
 
 void Noise::render(){
-	SDL_SetRenderDrawColor(renderer, 0, 128, 0, 0);
+	SDL_SetRenderDrawColor(renderer, 32, 32, 32, 0);
 	SDL_RenderClear(renderer);
 
-	SDL_SetRenderDrawColor(renderer2, 128, 0, 0, 0);
+	SDL_SetRenderDrawColor(renderer2, 64, 64, 64, 0);
 	SDL_RenderClear(renderer2);
 	//-------------------------------
-
+	but.render(renderer2);
 	//-------------------------------
 	SDL_RenderPresent(renderer);
 	SDL_RenderPresent(renderer2);
