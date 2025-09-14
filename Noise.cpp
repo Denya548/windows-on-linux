@@ -4,31 +4,40 @@
 using namespace std;
 
 SDL_Event event;
+SDL_Window* windows[2];
 
 Button but;
 int mousePos[2];
 
 void Noise::init(const char *title, int posX, int posY, int width, int height, bool fullscrean){
 	if(SDL_Init(SDL_INIT_EVERYTHING) == 0){
-		window = SDL_CreateWindow(title, posX, posY, width, height, 0);
-		window2 = SDL_CreateWindow(title, posX, posY, width, height, 0);
-		renderer = SDL_CreateRenderer(window, -1, 0);
-		renderer2 = SDL_CreateRenderer(window2, -1, 0);
+		windows[0] = SDL_CreateWindow(title, posX, posY, width, height, 0);
+		windows[1] = SDL_CreateWindow(title, posX, posY, width, height, 0);
+		renderer[0] = SDL_CreateRenderer(windows[0], -1, 0);
+		renderer[1] = SDL_CreateRenderer(windows[1], -1, 0);
 		isRunning = true;
 		frame = 0;
 		
-		SDL_HideWindow(window2);
+		SDL_HideWindow(windows[1]);
 	}
 }
 Uint32 mouseState;
 void Noise::update(){
 	mouseState = SDL_GetMouseState(&mousePos[0], &mousePos[1]);
+	
+	//printf("%d\n", SDL_GL_GetCurrentWindow() == window2);
 	frame++;
 }
 
 void Noise::handleEvents()
 {
     while(SDL_PollEvent(&event)){
+		if(event.type == SDL_MOUSEMOTION && event.motion.windowID == SDL_GetWindowID(windows[1])){
+			but.window2IsCurrent = true;	
+		}
+		else{
+			but.window2IsCurrent = false;	
+		}
         switch (event.type)
         {
 			case SDL_KEYDOWN:
@@ -36,11 +45,11 @@ void Noise::handleEvents()
 					case SDLK_q:
 						isRunning = false;
 						break;
-					case SDLK_w:
-						SDL_HideWindow(window2);
-						break;
 					case SDLK_s:
-						SDL_ShowWindow(window2);
+						SDL_HideWindow(windows[1]);
+						break;
+					case SDLK_w:
+						SDL_ShowWindow(windows[1]);
 						break;
 					default:
         				break;
@@ -55,23 +64,23 @@ void Noise::handleEvents()
 }
 
 void Noise::render(){
-	SDL_SetRenderDrawColor(renderer, 32, 32, 32, 0);
-	SDL_RenderClear(renderer);
+	SDL_SetRenderDrawColor(renderer[0], 32, 32, 32, 0);
+	SDL_RenderClear(renderer[0]);
 
-	SDL_SetRenderDrawColor(renderer2, 64, 64, 64, 0);
-	SDL_RenderClear(renderer2);
+	SDL_SetRenderDrawColor(renderer[1], 64, 64, 64, 0);
+	SDL_RenderClear(renderer[1]);
 	//-------------------------------
-	but.render(renderer2, mousePos);
+	but.render(renderer[1], mousePos);
 	//-------------------------------
-	SDL_RenderPresent(renderer);
-	SDL_RenderPresent(renderer2);
+	SDL_RenderPresent(renderer[0]);
+	SDL_RenderPresent(renderer[1]);
 }
 
 void Noise::clean(){
-    SDL_DestroyWindow(window);
-    SDL_DestroyWindow(window2);
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyRenderer(renderer2);
+    SDL_DestroyWindow(windows[0]);
+    SDL_DestroyWindow(windows[1]);
+    SDL_DestroyRenderer(renderer[0]);
+    SDL_DestroyRenderer(renderer[1]);
     SDL_Quit();
  }
 //g++ Noise.cpp main.cpp TextureManager.cpp -o main -lSDL2 -lSDL2_image

@@ -13,11 +13,9 @@
 #include "Button.hpp"
 
 struct Noise{
-	SDL_Renderer *renderer;
-	SDL_Renderer *renderer2;
+	SDL_Renderer *renderer[2];
 	bool isRunning;
-	SDL_Window *window;
-	SDL_Window *window2;
+	SDL_Window *windows[2];
 	int width = 910;
 	int height = 540;
 	void init(const char* title, int posX, int posY, int width, int height, bool fullscreen);
