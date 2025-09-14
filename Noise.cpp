@@ -6,6 +6,7 @@ using namespace std;
 SDL_Event event;
 
 Button but;
+int mousePos[2];
 
 void Noise::init(const char *title, int posX, int posY, int width, int height, bool fullscrean){
 	if(SDL_Init(SDL_INIT_EVERYTHING) == 0){
@@ -19,8 +20,9 @@ void Noise::init(const char *title, int posX, int posY, int width, int height, b
 		SDL_HideWindow(window2);
 	}
 }
-
+Uint32 mouseState;
 void Noise::update(){
+	mouseState = SDL_GetMouseState(&mousePos[0], &mousePos[1]);
 	frame++;
 }
 
@@ -59,7 +61,7 @@ void Noise::render(){
 	SDL_SetRenderDrawColor(renderer2, 64, 64, 64, 0);
 	SDL_RenderClear(renderer2);
 	//-------------------------------
-	but.render(renderer2);
+	but.render(renderer2, mousePos);
 	//-------------------------------
 	SDL_RenderPresent(renderer);
 	SDL_RenderPresent(renderer2);
