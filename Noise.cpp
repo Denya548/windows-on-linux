@@ -24,7 +24,7 @@ void Noise::init(const char *title, int posX, int posY, int width, int height, b
 Uint32 mouseState;
 void Noise::update(){
 	mouseState = SDL_GetMouseState(&mousePos[0], &mousePos[1]);
-	
+	//printf("%d\n", mouseState);	
 	//printf("%d\n", SDL_GL_GetCurrentWindow() == window2);
 	frame++;
 }
@@ -70,7 +70,7 @@ void Noise::render(){
 	SDL_SetRenderDrawColor(renderer[1], 64, 64, 64, 0);
 	SDL_RenderClear(renderer[1]);
 	//-------------------------------
-	but.render(renderer[1], mousePos);
+	but.render(renderer[1], mousePos, mouseState);
 	//-------------------------------
 	SDL_RenderPresent(renderer[0]);
 	SDL_RenderPresent(renderer[1]);
